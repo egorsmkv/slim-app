@@ -1,7 +1,7 @@
 Add a line to /etc/hosts:
 
 ```
-echo "127.0.0.1 yewater-website.local.local" | sudo tee -a /etc/hosts
+echo "127.0.0.1 website.local" | sudo tee -a /etc/hosts
 ```
 
 Install:
