@@ -6,6 +6,11 @@ example.com {
 	}
 
 	tls yehor@example.com
+	
+	route /admin* {
+		uri strip_prefix /admin
+		reverse_proxy localhost:8091
+	}
 
 	root * /app/frontend/public
 
