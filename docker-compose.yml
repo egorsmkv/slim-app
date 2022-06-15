@@ -1,0 +1,71 @@
+version: '3'
+
+services:
+  apps:
+    build:
+      context: docker/apps
+    env_file:
+      - prod.env
+    restart: always
+    volumes:
+      - ./phpfpm/prod/env.conf:/opt/bitnami/php/etc/php-fpm.d/env.conf
+      - ./phpfpm/prod/custom.ini:/opt/bitnami/php/etc/conf.d/custom.ini
+      - ./apps:/app
+
+  queue_worker:
+    image: bitnami/php-fpm:8.0.11-prod
+    restart: always
+    tty: true
+    volumes:
+      - ./phpfpm/prod/env.conf:/opt/bitnami/php/etc/php-fpm.d/env.conf
+      - ./phpfpm/prod/custom.ini:/opt/bitnami/php/etc/conf.d/custom.ini
+      - ./apps:/app
+    command: sh -c "cd /app/frontend && php artisan queue:work"
+    depends_on:
+      - mysql
+
+  caddy:
+    image: caddy:2.4.5
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/prod/Caddyfile:/etc/caddy/Caddyfile
+      - ./ssl:/ssl
+      - ./apps:/app
+      - caddy_data:/data
+    depends_on:
+      - apps
+      - queue_worker
+
+  mysql:
+    image: mysql/mysql-server:8.0.23
+    command: [ '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--default-authentication-plugin=mysql_native_password' ]
+    ports:
+      - "3380:3306"
+    env_file:
+      - prod.env
+    restart: always
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8001:80"
+    env_file:
+      - prod.env
+    restart: always
+    volumes:
+      - pma_data:/sessions
+    depends_on:
+      - mysql
+
+  redis:
+    image: redis:alpine
+
+volumes:
+  caddy_data:
+  pma_data:
+  mysql_data:

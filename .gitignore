@@ -1,0 +1,9 @@
+.idea/
+
+apps/frontend/vendor/
+apps/frontend/db.sqlite
+
+ssl/cert.pem
+ssl/key.pem
+
+phpfpm/logs
