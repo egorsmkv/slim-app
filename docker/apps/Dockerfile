@@ -1,4 +1,4 @@
-FROM bitnami/php-fpm:8.0.11-prod
+FROM bitnami/php-fpm:8.0.15-prod
 
 RUN apt update && apt install -y autoconf php-dev pkg-php-tools build-essential
 
