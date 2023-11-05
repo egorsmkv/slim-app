@@ -1,5 +1,3 @@
-.idea/
-
 apps/frontend/vendor/
 apps/frontend/db.sqlite
 
