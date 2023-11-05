@@ -24,9 +24,5 @@ services:
     depends_on:
       - apps
 
-  redis:
-    image: redis:alpine
-
-
 volumes:
   caddy_data:

@@ -7,7 +7,7 @@ docker-compose -f docker-compose.dev.yml build
 
 docker-compose -f docker-compose.dev.yml up
 
-docker exec -it caddy-laravel-php8_apps_1 bash
+docker exec -it slim-app_apps_1 bash
 
 cd /app/frontend && php composer.phar install
 ```
